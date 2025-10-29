@@ -32,9 +32,9 @@
 
 \## 🧩 Thành viên nhóm
 
-\- Thành viên 1: Phụ trách backend + GitHub
+\- Thành viên 1: Phụ trách backend (1 phần)+ frontend
 
-\- Thành viên 2: Phụ trách frontend + AI
+\- Thành viên 2: Phụ trách Github + AI + backend (1 phần)
 
 
 

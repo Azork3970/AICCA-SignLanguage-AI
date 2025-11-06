@@ -1,6 +1,9 @@
 .signlang__header {
     display: flex;
     flex-direction: row;
+    background: var(--color-blog);
+    border-radius: 20px;
+    box-shadow: 0 4px 6px var(--color-shadow);
 }
 
 .signlang__header-content {

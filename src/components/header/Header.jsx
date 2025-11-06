@@ -7,9 +7,9 @@ const Header = () => {
     <div className="signlang__header section__padding gradient__bg" id="home">
 
     <div className="signlang__header-content">
-      <h1 className="gradient__text">Increase your Cognitive Brain Power with SLR.</h1>
+      <h1 className="gradient__text">Tăng cường sức mạnh não bộ với SLR.</h1>
       <p>
-      It has been proven in studies that learning sign language keeps you on your feet as you age and also increase your thinking power.Also learning sign language will help you communicate with 72  Million Speakers worldwide. So Test out our tool, Learn and Practice Sign Language and Have Fun
+      Các nghiên cứu đã chứng minh rằng học ngôn ngữ ký hiệu giúp bạn giữ vững khi tuổi cao và tăng cường sức nghĩ. Ngoài ra, học ngôn ngữ ký hiệu sẽ giúp bạn giao tiếp với 72 triệu người nói trên toàn thế giới. Hãy thử công cụ của chúng tôi, Học và Luyện tập Ngôn ngữ Ký hiệu và Vui vẻ
       </p>
 
     </div>

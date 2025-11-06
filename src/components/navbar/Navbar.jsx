@@ -47,20 +47,20 @@ const Navbar = ({ notifyMsg }) => {
 
         <div className="signlang_navlinks_container">
           <p>
-            <Link to="/">Home</Link>
+            <Link to="/">Trang chủ</Link>
           </p>
 
           <p>
-            <Link to="/detect">Detect</Link>
+            <Link to="/detect">Nhận diện</Link>
           </p>
 
           {/* <p>
-            <Link to="/guide">Guide</Link>
+            <Link to="/guide">Hướng dẫn</Link>
           </p> */}
 
           {accessToken && (
             <p>
-              <Link to="/dashboard">Dashboard</Link>
+              <Link to="/dashboard">Bảng điều khiển</Link>
             </p>
           )}
         </div>
@@ -70,12 +70,12 @@ const Navbar = ({ notifyMsg }) => {
             <>
               <img src={user?.photoURL} alt="user-icon" />
               <button type="button" onClick={handleLogout}>
-                Logout
+                Đăng xuất
               </button>
             </>
           ) : (
             <button type="button" onClick={handleLogin}>
-              Login
+              Đăng nhập
             </button>
           )}
         </div>
@@ -95,16 +95,16 @@ const Navbar = ({ notifyMsg }) => {
           <div className="signlang__navbar-menu_container scale-up-center">
             <div className="signlang__navbar-menu_container-links">
               <p>
-                <Link to="/">Home</Link>
+                <Link to="/">Trang chủ</Link>
               </p>
 
               <p>
-                <Link to="/detect">Detect</Link>
+                <Link to="/detect">Nhận diện</Link>
               </p>
 
               {accessToken && (
                 <p>
-                  <Link to="/dashboard">Dashboard</Link>
+                  <Link to="/dashboard">Bảng điều khiển</Link>
                 </p>
               )}
             </div>
@@ -114,12 +114,12 @@ const Navbar = ({ notifyMsg }) => {
                 <>
                   <img src={user?.photoURL} alt="user-icon" />
                   <button type="button" onClick={handleLogout}>
-                    Logout
+                    Đăng xuất
                   </button>
                 </>
               ) : (
                 <button type="button" onClick={handleLogin}>
-                  Login
+                  Đăng nhập
                 </button>
               )}
             </div>

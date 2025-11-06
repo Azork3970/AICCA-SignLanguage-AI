@@ -16,7 +16,7 @@ app.use(express.json());
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
+  password: process.env.DB_PASSWORD || 'khang12345',
   database: process.env.DB_NAME || 'sign_language_db',
 };
 

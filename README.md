@@ -1,123 +1,39 @@
-# **Sign Language Recognition for Deaf and Dumb**
+Ứng dụng hỗ trợ giao tiếp thông minh cho người khiếm thính dựa trên nhận dạng ngôn ngữ ký hiệu bằng AI
 
-![Banner](./public/banner.png)
+# AICCA - AI-Powered Sign Language Recognition and Communication Assistant
 
-- Our sign language recognition project involved creating a custom dataset, preprocessing images, training a model, integrating with React, and hosting with Node.js backend.
+## 🌟 Giới thiệu
 
-- The result is a real-time sign language recognition application that recognizes a variety of sign language gestures.
+Ứng dụng web giúp người khiếm thính giao tiếp bằng cách nhận dạng ngôn ngữ ký hiệu qua webcam và chuyển thành văn bản hoặc giọng nói (và ngược lại).
 
-- Our Model is trained for 26 alphabets and 16 words of ASL and which are commonly used in general communication.
+## ⚙️ Công nghệ sử dụng
 
-## Features
+- Frontend: React.js
 
-- Real-Time Recognition
+- Backend: Node.js (Express)
 
-- Easy-to-Use Interface
+- AI Service: Python (MediaPipe, TensorFlow)
 
-- Adaptive Learning
+- Database: MySQL
 
-- High Accuracy
+- Authentication: JWT
 
-- Real Time User Progress Data
+- TTS: Web Speech API / gTTS
 
-## Tech Stack
+## 🧩 Thành viên nhóm
 
-**Front-end:**
+- Thành viên 1: Phụ trách backend (1 phần)+ frontend
 
-- React
-- Redux
+- Thành viên 2: Phụ trách Github + AI + backend (1 phần)
 
-**Back-end:**
+## 📅 Tiến độ
 
-- Node.js with Express
-- MySQL database
-- JWT Authentication
+- [x] Tuần 1: Hoàn thiện mô tả đề tài, tạo GitHub
 
-**Machine Learning Framework:**
+- [ ] Tuần 2: Khởi tạo project React + Node
 
-- MediaPipe
+- [ ] Tuần 3: Tích hợp webcam và AI cơ bản
 
-**NPM Packages:**
+- [ ] Tuần 4–6: Hoàn thiện giao diện, backend, AI
 
-- @mediapipe/drawing_utils
-- @mediapipe/hands
-- @mediapipe/tasks-vision
-- @redux-devtools/extension
-- axios
-- chart.js
-- js-cookie
-- react-chartjs-2
-- react-icons
-- react-redux
-- react-router-dom
-- react-toastify
-- react-webcam
-- redux
-- redux-thunk
-- uuid
-
-## Team Members
-
-- So this project is a group project done in collaboration with the members mentioned below.
-
-| Name            | Email-id                      |
-| :-------------- | :---------------------------- |
-| Shubham More    | `shubhamp1251@gmail.com`      |
-| Sameer Metkar   | `sameermetkar@gmail.com`      |
-| Omkar Mandavkar | `omkarmandavkar000@gmail.com` |
-| Durgesh Kolhe   | `dkolhe985@gmail.com`         |
-
-## Project Details
-
-- **Our Project Report:** [Report.pdf](https://drive.google.com/file/d/1A_gBXKfEjNwHZbtnanu82jgLrbtblQ38/view?usp=sharing)
-
-- **Published Paper:** [Paper.pdf](https://drive.google.com/file/d/1KEP_kAessP08Zo8zHsG9IqlP4Yuj9SO0/view?usp=sharing)
-
-- **Dataset Link:** [Sign_Dataset](https://drive.google.com/drive/folders/1LUUknqqRNHAmIZYrcgo-4n2HrM37uFa3?usp=share_link)
-
-- **Gesture Recogition Documentation:** [Mediapipe](https://developers.google.com/mediapipe/solutions/vision/gesture_recognizer)
-
-- **The Model Training File is located in root folder**
-
-
-## Steps to set up the project
-
-- **Check this document for project setup:** [SetUpDoc.docx](https://docs.google.com/document/d/1siwZjc0LJQgKTn__vtzs8tMfr9OElrsThmqmRJc9dHE/edit?usp=sharing)
-
-
-## Authors
-
-- [@shubham-more](https://github.com/shubhammore1251/)
-- [@sameer-metkar](https://github.com/sameermetkar/)
-- [@omkar-mandavkar](https://github.com/omkarmandavkar/)
-- [@durgesh-kolhe](https://github.com/Durgesh240)
-
-## Acknowledgements
-
-- [React](https://react.dev/)
-- [mediapipe](https://developers.google.com/mediapipe)
-- [Node.js](https://nodejs.org/)
-- [Express](https://expressjs.com/)
-- [MySQL](https://www.mysql.com/)
-- [NPM](https://www.npmjs.com/)
-
-## Screenshots
-
-![Hello Image](./public/screenshots/Hello.jpg)
-
-![Meet Image](./public/screenshots/Meet.jpg)
-
-![Deaf Image](./public/screenshots/Deaf.jpg)
-
-![Bye Image](./public/screenshots/Bye.jpg)
-
-![D Image](./public/screenshots/D.jpg)
-
-![Dashboard Image](./public/screenshots/dasboard.jpeg)
-
-## Support
-
-For support, contact
-
-- email: shubhamp1251@gmail.com
-- LinkedIn: [Shubham More](https://www.linkedin.com/in/shubham-more1251/)
+- [ ] Tuần 7–8: Test, viết báo cáo và nộp

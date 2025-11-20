@@ -56,39 +56,54 @@ module.exports = (passport, db) => {
         clientID: process.env.FACEBOOK_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
         callbackURL: `${process.env.BASE_URL}/auth/facebook/callback`,
-        profileFields: ['id', 'displayName', 'emails', 'photos']
+        profileFields: ['id', 'displayName', 'photos']
     },
-    async (accessToken, refreshToken, profile, done) => {
-        try {
-            const [existingUsers] = await db.execute(
-                "SELECT * FROM users WHERE provider_id = ? AND provider = 'facebook'",
-                [profile.id]
+async (accessToken, refreshToken, profile, done) => {
+    try {
+        // Fallback email trong TH Facebook không trả về email
+        const email =
+            profile.emails && profile.emails.length > 0
+                ? profile.emails[0].value
+                : `${profile.id}@facebook.com`; // tạo email ảo tránh lỗi NULL
+
+        const photo =
+            profile.photos && profile.photos.length > 0
+                ? profile.photos[0].value
+                : null;
+
+        // Kiểm tra user đã tồn tại chưa
+        const [existingUsers] = await db.execute(
+            "SELECT * FROM users WHERE provider_id = ? AND provider = 'facebook'",
+            [profile.id]
+        );
+
+        let user;
+        if (existingUsers.length === 0) {
+            const userId = crypto.randomUUID();
+
+            await db.execute(
+                "INSERT INTO users (id, name, email, provider, provider_id, photo_url) VALUES (?, ?, ?, ?, ?, ?)",
+                [
+                    userId,
+                    profile.displayName,
+                    email,
+                    'facebook',
+                    profile.id,
+                    photo
+                ]
             );
 
-            let user;
-            if (existingUsers.length === 0) {
-                const userId = crypto.randomUUID();
-                await db.execute(
-                    "INSERT INTO users (id, name, email, provider, provider_id, photo_url) VALUES (?, ?, ?, ?, ?, ?)",
-                    [
-                        userId,
-                        profile.displayName,
-                        profile.emails ? profile.emails[0].value : null,
-                        'facebook',
-                        profile.id,
-                        profile.photos ? profile.photos[0].value : null
-                    ]
-                );
-                user = { id: userId, name: profile.displayName };
-            } else {
-                user = existingUsers[0];
-            }
-
-            return done(null, user);
-        } catch (err) {
-            return done(err, null);
+            user = { id: userId, name: profile.displayName, email };
+        } else {
+            user = existingUsers[0];
         }
-    }));
+
+        return done(null, user);
+
+    } catch (err) {
+        return done(err, null);
+    }
+}));
 
     // SESSION
     passport.serializeUser((user, done) => {
@@ -184,8 +199,9 @@ module.exports = (passport, db) => {
 
     // FACEBOOK ROUTES
     router.get('/facebook',
-        passport.authenticate('facebook')
-    );
+    passport.authenticate('facebook', { scope: ['public_profile'] })
+);
+
 
     router.get('/facebook/callback',
         passport.authenticate('facebook', { failureRedirect: '/login' }),

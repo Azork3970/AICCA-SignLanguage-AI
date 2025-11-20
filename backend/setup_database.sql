@@ -20,13 +20,15 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- The SignData table will be created automatically by the application
--- But you can create it manually if needed:
--- CREATE TABLE IF NOT EXISTS SignData (
---   id VARCHAR(255) PRIMARY KEY,
---   userId VARCHAR(255) NOT NULL,
---   username VARCHAR(255) NOT NULL,
---   createdAt DATETIME NOT NULL,
---   signsPerformed JSON NOT NULL,
---   secondsSpent INT NOT NULL
--- );
+-- SignData table for storing sign language recognition data
+CREATE TABLE IF NOT EXISTS SignData (
+  id VARCHAR(255) PRIMARY KEY,
+  userId VARCHAR(255) NOT NULL,
+  username VARCHAR(255) NOT NULL,
+  createdAt DATETIME NOT NULL,
+  signsPerformed JSON NOT NULL,
+  secondsSpent INT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_userId (userId),
+  INDEX idx_createdAt (createdAt)
+);

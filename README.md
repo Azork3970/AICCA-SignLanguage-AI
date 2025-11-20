@@ -26,9 +26,9 @@
 
 \## 🧩 Thành viên nhóm
 
-\- Thành viên 1 (Vũ Kha): Phụ trách một phần backend + AI + Github
+\- Thành viên 1 (Vũ Kha): Phụ trách backend (1 phần) + AI + Github
 
-\- Thành viên 2 (Tuấn Khang): Phụ trách một phần backend + frontend
+\- Thành viên 2 (Tuấn Khang): Phụ trách backend (1 phần) + frontend
 
 
 

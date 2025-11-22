@@ -15,8 +15,10 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255), -- NULL for OAuth users
   provider ENUM('local', 'google', 'facebook') DEFAULT 'local',
   provider_id VARCHAR(255), -- OAuth provider ID
-  photo_url VARCHAR(500),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    photo_url VARCHAR(500),
+    reset_token VARCHAR(255),
+    reset_token_expiry DATETIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 

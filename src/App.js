@@ -8,6 +8,7 @@ import {
   NotFound,
   Dashboard,
   Login,
+  ForgotPassword,
 } from "./components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -68,6 +69,8 @@ function App() {
         />
 
         <Route exact path="/login" element={<Login notifyMsg={notifyMsg} />} />
+
+        <Route exact path="/forgot-password" element={<ForgotPassword notifyMsg={notifyMsg} />} />
 
         <Route exact path="*" element={<NotFound />} />
       </Routes>

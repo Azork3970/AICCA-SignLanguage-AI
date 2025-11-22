@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { login, register, loginWithGoogle, loginWithFacebook, loadProfile } from '../../redux/actions/authaction';
+import { login, register, loginWithGoogle, loginWithFacebook, loadProfile, forgotPassword } from '../../redux/actions/authaction';
+import googleIcon from '../../assests/google.png';
+import facebookIcon from '../../assests/facebook_icon.png';
 import './Login.css';
 
 const Login = ({ notifyMsg }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: [] });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,6 +26,24 @@ const Login = ({ notifyMsg }) => {
   const navigate = useNavigate();
   const { error } = useSelector((state) => state.auth);
 
+  // Load saved form data from localStorage
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('loginFormData');
+    if (savedFormData) {
+      try {
+        const parsed = JSON.parse(savedFormData);
+        setFormData(prev => ({
+          ...prev,
+          email: parsed.email || '',
+          name: parsed.name || ''
+        }));
+        setRememberMe(parsed.rememberMe || false);
+      } catch (e) {
+        console.error('Error parsing saved form data:', e);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (window.location.search.includes('token=')) {
       const urlParams = new URLSearchParams(window.location.search);
@@ -31,15 +55,16 @@ const Login = ({ notifyMsg }) => {
           userId: payload.userId,
           photoURL: payload.photoURL || null
         };
-        Cookies.set('sign-language-ai-access-token', token, { expires: 2 });
-        Cookies.set('sign-language-ai-user', JSON.stringify(profile), { expires: 2 });
+        const expires = rememberMe ? 7 : 2; // 7 days if remember me, else 2 hours
+        Cookies.set('sign-language-ai-access-token', token, { expires });
+        Cookies.set('sign-language-ai-user', JSON.stringify(profile), { expires });
         dispatch(loadProfile(profile, token));
         window.history.replaceState({}, document.title, window.location.pathname);
         notifyMsg('success', 'Đăng nhập thành công!');
         navigate('/');
       }
     }
-  }, [dispatch, navigate, notifyMsg]);
+  }, [dispatch, navigate, notifyMsg, rememberMe]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -93,10 +118,11 @@ const Login = ({ notifyMsg }) => {
     setLoading(true);
     try {
       if (isLogin) {
-        // Login
+        // Login with remember me
         await dispatch(login({
           email: formData.email,
-          password: formData.password
+          password: formData.password,
+          rememberMe
         }));
         notifyMsg('success', 'Đăng nhập thành công!');
         navigate('/');
@@ -123,6 +149,8 @@ const Login = ({ notifyMsg }) => {
       setLoading(false);
     }
   };
+
+
 
   const handleGoogleLogin = () => {
     // Redirect to backend OAuth route which will redirect to Google
@@ -195,6 +223,27 @@ const Login = ({ notifyMsg }) => {
             </div>
           )}
 
+          {isLogin && (
+            <div className="form-group remember-me">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <span className="checkmark"></span>
+                Ghi nhớ đăng nhập
+              </label>
+              <button
+                type="button"
+                className="forgot-password-btn"
+                onClick={() => navigate('/forgot-password')}
+              >
+                Quên mật khẩu?
+              </button>
+            </div>
+          )}
+
           <button
             type="submit"
             className="login-submit-btn"
@@ -208,6 +257,8 @@ const Login = ({ notifyMsg }) => {
           </button>
         </form>
 
+
+
         <div className="divider">
           <span>hoặc</span>
         </div>
@@ -219,7 +270,7 @@ const Login = ({ notifyMsg }) => {
             disabled={loading}
             type="button"
           >
-            <img src="/assests/google.png" alt="Google" className="google-icon" />
+            <img src={googleIcon} alt="Google" className="google-icon" />
             Đăng nhập với Google
           </button>
 
@@ -229,7 +280,7 @@ const Login = ({ notifyMsg }) => {
             disabled={loading}
             type="button"
           >
-            <img src="/assests/facebook_icon.png" alt="Facebook" className="facebook-icon" />
+            <img src={facebookIcon} alt="Facebook" className="facebook-icon" />
             Đăng nhập với Facebook
           </button>
         </div>

@@ -41,6 +41,9 @@ let db;
 
     console.log('DB connected');
 
+    // Make db globally available
+    global.db = db;
+
     // 1) LOAD PASSPORT CONFIG + PASS DB
     require('./routes/auth/auth.js')(passport, db);
 

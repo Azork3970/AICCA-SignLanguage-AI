@@ -35,8 +35,11 @@ const Dashboard = () => {
 
   const { topUsers } = useSelector((state) => state.topUsers);
 
+  // Ensure signDataList is an array
+  const safeSignDataList = Array.isArray(signDataList) ? signDataList : [];
+
   //create a new object array which contains only signs performed array
-  const list = signDataList
+  const list = safeSignDataList
     .map((data) => data.signsPerformed)
     .reduce((acc, val) => acc.concat(val), []);
 

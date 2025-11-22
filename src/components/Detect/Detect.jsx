@@ -40,6 +40,7 @@ const Detect = () => {
   const dispatch = useDispatch();
 
   const [currentImage, setCurrentImage] = useState(null);
+  const [ttsEnabled, setTtsEnabled] = useState(true);
 
   useEffect(() => {
     let intervalId;
@@ -52,6 +53,29 @@ const Detect = () => {
     }
     return () => clearInterval(intervalId);
   }, [webcamRunning]);
+
+  // TTS functionality
+  useEffect(() => {
+    if (gestureOutput && ttsEnabled && 'speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(gestureOutput);
+      utterance.lang = 'vi-VN'; // Set to Vietnamese, can be made configurable
+      utterance.rate = 0.8;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      // Get available voices and set a Vietnamese voice if available
+      const voices = speechSynthesis.getVoices();
+      const vietnameseVoice = voices.find(voice => voice.lang.startsWith('vi'));
+      if (vietnameseVoice) {
+        utterance.voice = vietnameseVoice;
+      }
+
+      speechSynthesis.speak(utterance);
+    }
+  }, [gestureOutput, ttsEnabled]);
 
   if (
     process.env.NODE_ENV === "development" ||
@@ -244,6 +268,17 @@ const Detect = () => {
                 <button onClick={enableCam}>
                   {webcamRunning ? "Stop" : "Start"}
                 </button>
+
+                <div className="tts-toggle">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={ttsEnabled}
+                      onChange={(e) => setTtsEnabled(e.target.checked)}
+                    />
+                    Phát âm ký hiệu
+                  </label>
+                </div>
 
                 <div className="signlang_data">
                   <p className="gesture_output">{gestureOutput}</p>

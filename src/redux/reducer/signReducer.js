@@ -91,7 +91,7 @@ export const TopSignUsersReducer = (state = {
     case GET_TOP_USERS_SUCCESS: {
       return {
         ...state,
-        topUsers: payload,
+        topUsers: payload || [],
         loading: false,
       };
     }

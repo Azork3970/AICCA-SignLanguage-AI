@@ -3,10 +3,18 @@ const { authenticateToken } = require('../middleware/auth');
 const { createTableQuery, insertSignDataQuery, getSignDataByUserQuery, getAllSignDataQuery } = require('../models/SignData');
 const router = express.Router();
 
+// Middleware to attach db to req
+router.use((req, res, next) => {
+  req.db = global.db;
+  next();
+});
+
 // Initialize database table
 router.use(async (req, res, next) => {
   try {
-    await req.db.execute(createTableQuery);
+    if (req.db) {
+      await req.db.execute(createTableQuery);
+    }
     next();
   } catch (error) {
     console.error('Error creating table:', error);

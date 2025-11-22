@@ -29,12 +29,9 @@ const Dashboard = () => {
     dispatch(getTopUsers());
   }, [accessToken, authLoader, navigate,dispatch]);
 
-  useEffect(() => {
-    dispatch(getSignData());
-    dispatch(getTopUsers());
-  }, [dispatch]);
+  // Removed duplicate useEffect
 
-  const { signDataList, loading } = useSelector((state) => state.signData);
+  const { signDataList, loading, error } = useSelector((state) => state.signData);
 
   const { topUsers } = useSelector((state) => state.topUsers);
 

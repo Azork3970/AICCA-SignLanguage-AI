@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
   padding: 20px;
 }
 
@@ -84,7 +84,7 @@
 
 .login-submit-btn {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
   border: none;
   border-radius: 10px;
   padding: 15px 20px;
@@ -233,7 +233,7 @@
 }
 
 .toggle-btn:hover {
-  color: #764ba2;
+  color: #0077b6;
 }
 
 .login-footer a {
@@ -243,6 +243,136 @@
 
 .login-footer a:hover {
   text-decoration: underline;
+}
+
+.remember-me {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--color-text);
+  position: relative;
+}
+
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  height: 18px;
+  width: 18px;
+  background-color: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  margin-right: 8px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label input:checked ~ .checkmark {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.forgot-password-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-btn:hover {
+  color: #0077b6;
+}
+
+.forgot-password-form {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.forgot-password-form .form-group input {
+  margin-bottom: 0;
+}
+
+.forgot-password-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.forgot-submit-btn,
+.forgot-cancel-btn {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.forgot-submit-btn {
+  background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
+  color: white;
+}
+
+.forgot-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.forgot-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.forgot-cancel-btn {
+  background: #f3f3f3;
+  color: var(--color-text);
+}
+
+.forgot-cancel-btn:hover {
+  background: #e0e0e0;
 }
 
 @media screen and (max-width: 480px) {
@@ -268,5 +398,15 @@
   .form-group input {
     padding: 10px 12px;
     font-size: 14px;
+  }
+
+  .remember-me {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .forgot-password-actions {
+    flex-direction: column;
   }
 }

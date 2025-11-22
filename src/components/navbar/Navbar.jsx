@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assests/logo2.png";
+import UserIcon from "../../assests/user-icon.png";
 import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "../../redux/actions/authaction";
+import { logout } from "../../redux/actions/authaction";
 
 const Navbar = ({ notifyMsg }) => {
   const [toggle, setToggle] = useState(false);
@@ -13,18 +14,7 @@ const Navbar = ({ notifyMsg }) => {
 
   const { accessToken } = useSelector((state) => state.auth);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (isLoggedIn && user) {
-      notifyMsg(
-        "success",
-        `Welcome! ${user?.name}, You Logged in Successfully`
-      );
-    }
-  }, [isLoggedIn, user, notifyMsg]);
 
   const navigate = useNavigate();
 
@@ -69,7 +59,7 @@ const Navbar = ({ notifyMsg }) => {
         <div className="signlang_auth-data">
           {accessToken ? (
             <>
-              <img src={user?.photoURL} alt="user-icon" />
+              <img src={user?.photoURL || UserIcon} alt="user-icon" />
               <button type="button" onClick={handleLogout}>
                 Đăng xuất
               </button>
@@ -113,7 +103,7 @@ const Navbar = ({ notifyMsg }) => {
             <div className="signlang__navbar-menu_container-links-authdata">
               {accessToken ? (
                 <>
-                  <img src={user?.photoURL} alt="user-icon" />
+                  <img src={user?.photoURL || UserIcon} alt="user-icon" />
                   <button type="button" onClick={handleLogout}>
                     Đăng xuất
                   </button>

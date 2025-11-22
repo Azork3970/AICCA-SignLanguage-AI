@@ -21,9 +21,12 @@ export const login = (credentials) => async (dispatch) => {
 
     const accessToken = res.data.accessToken;
     const profile = res.data.profile;
+    const rememberMe = credentials.rememberMe || false;
 
-    Cookies.set('sign-language-ai-access-token', accessToken, { expires: 2 });
-    Cookies.set('sign-language-ai-user', JSON.stringify(profile), { expires: 2 });
+    // Set cookie expiry based on remember me
+    const expires = rememberMe ? 7 : 2; // 7 days or 2 hours
+    Cookies.set('sign-language-ai-access-token', accessToken, { expires });
+    Cookies.set('sign-language-ai-user', JSON.stringify(profile), { expires });
 
     dispatch({
       type: LOGIN_SUCCESS,
@@ -131,6 +134,15 @@ export const loadProfile = (profile, token) => (dispatch) => {
     type: LOGIN_SUCCESS,
     payload: token,
   });
+};
+
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    const res = await axios.post(`${API_BASE_URL}/auth/forgot-password`, { email });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const logout = () => async dispatch => {

@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 
@@ -215,6 +216,75 @@ async (accessToken, refreshToken, profile, done) => {
             res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);
         }
     );
+
+    // FORGOT PASSWORD ROUTE
+    router.post('/forgot-password', async (req, res) => {
+        try {
+            const { email } = req.body;
+
+            if (!email) return res.status(400).json({ message: "Email is required" });
+
+            const [users] = await db.execute(
+                "SELECT * FROM users WHERE email = ? AND provider = 'local'",
+                [email]
+            );
+
+            if (users.length === 0) {
+                // Don't reveal if email exists for security
+                return res.json({ message: "If the email exists, a reset link has been sent" });
+            }
+
+            const user = users[0];
+            const resetToken = crypto.randomBytes(32).toString('hex');
+            const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour
+
+            // Store reset token in database (you might want to add a reset_token column)
+            await db.execute(
+                "UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE id = ?",
+                [resetToken, resetTokenExpiry, user.id]
+            );
+
+            // Send email with reset link
+            const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+
+            if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+                // Use Gmail if credentials are available
+                const transporter = nodemailer.createTransporter({
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS
+                    }
+                });
+
+                const mailOptions = {
+                    from: process.env.EMAIL_USER,
+                    to: email,
+                    subject: 'Password Reset Request',
+                    html: `
+                        <h2>Password Reset</h2>
+                        <p>You requested a password reset for your account.</p>
+                        <p>Click the link below to reset your password:</p>
+                        <a href="${resetLink}">Reset Password</a>
+                        <p>This link will expire in 1 hour.</p>
+                        <p>If you didn't request this, please ignore this email.</p>
+                    `
+                };
+
+                await transporter.sendMail(mailOptions);
+                console.log(`✅ Password reset email sent to ${email}`);
+            } else {
+                // Fallback: Log the reset link to console for testing
+                console.log(`🔗 Password reset link for ${email}: ${resetLink}`);
+                console.log('⚠️  Email credentials not configured. Copy the link above to test manually.');
+            }
+
+            res.json({ message: "If the email exists, a reset link has been sent" });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    });
 
     return router;
 };

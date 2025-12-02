@@ -205,4 +205,69 @@ export const SignImageData = [
     name: "NotOk",
     url: NotOkImg,
   },
+  // Vietnamese words
+  {
+    name: "Chào",
+    url: HelloImg, // Use Hello image for Chào
+  },
+  {
+    name: "Bạn",
+    url: MeetImg, // Use Meet image for Bạn (friend)
+  },
+  {
+    name: "Cảm ơn",
+    url: ThankYouImg, // Use ThankYou image for Cảm ơn
+  },
+  {
+    name: "Xin chào",
+    url: HelloImg, // Use Hello image for Xin chào
+  },
+  {
+    name: "Tạm biệt",
+    url: ByeImg, // Use Bye image for Tạm biệt
+  },
+  {
+    name: "Vâng",
+    url: YesImg, // Use Yes image for Vâng
+  },
+  {
+    name: "Không",
+    url: NoImg, // Use No image for Không
+  },
+  {
+    name: "Xin lỗi",
+    url: PleaseImg, // Use Please image for Xin lỗi
+  },
+  {
+    name: "Tôi",
+    url: MeImg, // Use Me image for Tôi
+  },
+  {
+    name: "Anh",
+    url: MeImg, // Use Me image for Anh
+  },
+  {
+    name: "Chị",
+    url: MeImg, // Use Me image for Chị
+  },
+  {
+    name: "Em",
+    url: MeImg, // Use Me image for Em
+  },
+  {
+    name: "Học",
+    url: LearnImg, // Use Learn image for Học
+  },
+  {
+    name: "Tên",
+    url: NameImg, // Use Name image for Tên
+  },
+  {
+    name: "Được",
+    url: OkImg, // Use Ok image for Được
+  },
+  {
+    name: "Không được",
+    url: NotOkImg, // Use NotOk image for Không được
+  },
 ];

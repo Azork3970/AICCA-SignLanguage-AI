@@ -5,6 +5,7 @@ import {
   Footer,
   Home,
   Detect,
+  Convert,
   NotFound,
   Dashboard,
   Login,
@@ -54,6 +55,16 @@ function App() {
           element={
             <Layout>
               <Detect />
+            </Layout>
+          }
+        />
+
+        <Route
+          exact
+          path="/convert"
+          element={
+            <Layout>
+              <Convert />
             </Layout>
           }
         />

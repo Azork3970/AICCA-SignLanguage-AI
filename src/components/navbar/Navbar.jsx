@@ -45,6 +45,10 @@ const Navbar = ({ notifyMsg }) => {
             <Link to="/detect">Nhận diện</Link>
           </p>
 
+          <p>
+            <Link to="/convert">Chuyển đổi</Link>
+          </p>
+
           {/* <p>
             <Link to="/guide">Hướng dẫn</Link>
           </p> */}
@@ -91,6 +95,10 @@ const Navbar = ({ notifyMsg }) => {
 
               <p>
                 <Link to="/detect">Nhận diện</Link>
+              </p>
+
+              <p>
+                <Link to="/convert">Chuyển đổi</Link>
               </p>
 
               {accessToken && (

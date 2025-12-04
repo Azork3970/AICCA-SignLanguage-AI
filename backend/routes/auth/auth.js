@@ -25,6 +25,9 @@ const securityLogger = winston.createLogger({
 module.exports = (passport, db) => {
     const router = express.Router();
 
+    // CSRF Protection middleware
+    const csrfProtection = csrf({ cookie: true });
+
     // -------------------------
     // PASSPORT GOOGLE STRATEGY
     // -------------------------

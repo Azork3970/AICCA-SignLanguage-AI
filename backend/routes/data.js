@@ -1,7 +1,22 @@
 const express = require('express');
 const { authenticateToken } = require('../middleware/auth');
 const { createTableQuery, insertSignDataQuery, getSignDataByUserQuery, getAllSignDataQuery } = require('../models/SignData');
+const { body, validationResult } = require('express-validator');
+const winston = require('winston');
 const router = express.Router();
+
+// Security logger for data operations
+const dataLogger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'data-security.log' }),
+    new winston.transports.Console()
+  ]
+});
 
 // Middleware to attach db to req
 router.use((req, res, next) => {

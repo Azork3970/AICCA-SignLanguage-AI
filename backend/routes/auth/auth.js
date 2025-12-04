@@ -3,8 +3,24 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { body, validationResult } = require('express-validator');
+const winston = require('winston');
+const csrf = require('csurf');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+
+// Security logger
+const securityLogger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'auth-security.log' }),
+    new winston.transports.Console()
+  ]
+});
 
 module.exports = (passport, db) => {
     const router = express.Router();
@@ -120,29 +136,83 @@ async (accessToken, refreshToken, profile, done) => {
     // AUTH ROUTES
     // -------------------------
 
-    router.post('/register', async (req, res) => {
+    // CSRF Token endpoint
+    router.get('/csrf-token', (req, res) => {
+        res.json({ csrfToken: req.csrfToken() });
+    });
+
+    // Password strength validation function
+    const validatePasswordStrength = (password) => {
+        const errors = [];
+        if (password.length < 8) errors.push('Mật khẩu phải có ít nhất 8 ký tự');
+        if (!/[A-Z]/.test(password)) errors.push('Mật khẩu phải chứa ít nhất 1 chữ hoa');
+        if (!/[a-z]/.test(password)) errors.push('Mật khẩu phải chứa ít nhất 1 chữ thường');
+        if (!/\d/.test(password)) errors.push('Mật khẩu phải chứa ít nhất 1 số');
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) errors.push('Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt');
+        return errors;
+    };
+
+    router.post('/register', csrfProtection, [
+        body('name').trim().isLength({ min: 2, max: 50 }).withMessage('Tên phải từ 2-50 ký tự'),
+        body('email').isEmail().normalizeEmail().withMessage('Email không hợp lệ'),
+        body('password').isLength({ min: 8 }).withMessage('Mật khẩu phải có ít nhất 8 ký tự')
+    ], async (req, res) => {
         try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                securityLogger.warn('Registration validation failed', {
+                    ip: req.ip,
+                    errors: errors.array(),
+                    userAgent: req.get('User-Agent')
+                });
+                return res.status(400).json({ message: "Dữ liệu không hợp lệ", errors: errors.array() });
+            }
+
             const { name, email, password } = req.body;
 
-            if (!name || !email || !password)
-                return res.status(400).json({ message: "Missing fields" });
+            // Additional password strength validation
+            const passwordErrors = validatePasswordStrength(password);
+            if (passwordErrors.length > 0) {
+                securityLogger.warn('Weak password registration attempt', {
+                    ip: req.ip,
+                    email,
+                    errors: passwordErrors
+                });
+                return res.status(400).json({ message: "Mật khẩu không đủ mạnh", errors: passwordErrors });
+            }
 
             const [exists] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
-            if (exists.length > 0)
-                return res.status(400).json({ message: "Email already used" });
+            if (exists.length > 0) {
+                securityLogger.warn('Registration attempt with existing email', {
+                    ip: req.ip,
+                    email
+                });
+                return res.status(400).json({ message: "Email đã được sử dụng" });
+            }
 
             const hash = await bcrypt.hash(password, 12);
             const id = crypto.randomUUID();
 
             await db.execute(
-                "INSERT INTO users (id, name, email, password, provider) VALUES (?, ?, ?, ?, 'local')",
+                "INSERT INTO users (id, name, email, password, provider, created_at, last_login) VALUES (?, ?, ?, ?, 'local', NOW(), NOW())",
                 [id, name, email, hash]
             );
 
-            res.json({ message: "Registered!" });
+            securityLogger.info('User registered successfully', {
+                userId: id,
+                email,
+                ip: req.ip
+            });
+
+            res.json({ message: "Đăng ký thành công!" });
 
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            securityLogger.error('Registration error', {
+                error: err.message,
+                ip: req.ip,
+                email: req.body.email
+            });
+            res.status(500).json({ message: "Lỗi server nội bộ" });
         }
     });
 

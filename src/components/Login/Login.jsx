@@ -14,6 +14,7 @@ const Login = ({ notifyMsg }) => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: [] });
+  const [csrfToken, setCsrfToken] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,7 +27,7 @@ const Login = ({ notifyMsg }) => {
   const navigate = useNavigate();
   const { error } = useSelector((state) => state.auth);
 
-  // Load saved form data from localStorage
+  // Load saved form data from localStorage and fetch CSRF token
   useEffect(() => {
     const savedFormData = localStorage.getItem('loginFormData');
     if (savedFormData) {
@@ -42,6 +43,21 @@ const Login = ({ notifyMsg }) => {
         console.error('Error parsing saved form data:', e);
       }
     }
+
+    // Fetch CSRF token from backend
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/auth/csrf-token`);
+        if (response.ok) {
+          const data = await response.json();
+          setCsrfToken(data.csrfToken);
+        }
+      } catch (error) {
+        console.error('Failed to fetch CSRF token:', error);
+      }
+    };
+
+    fetchCsrfToken();
   }, []);
 
   useEffect(() => {
@@ -171,6 +187,7 @@ const Login = ({ notifyMsg }) => {
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
+          {csrfToken && <input type="hidden" name="_csrf" value={csrfToken} />}
           {!isLogin && (
             <div className="form-group">
               <input

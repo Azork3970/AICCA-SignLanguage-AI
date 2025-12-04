@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addSignData } from "../../redux/actions/signdataaction";
 import ProgressBar from "./ProgressBar/ProgressBar";
 
-import DisplayImg from "../../assests/displayGif.gif";
+import DisplayImg from "../../assests/display.png";
 
 let startTime = "";
 

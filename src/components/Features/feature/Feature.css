@@ -4,8 +4,20 @@
     justify-content: space-between;
     align-items: flex-start;
     flex-direction: row;
-
     margin: 1rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 180, 216, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 180, 216, 0.1);
+    transition: all 0.3s ease;
+}
+
+.signlang__features-container__feature:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 180, 216, 0.15);
+    border-color: var(--color-primary);
 }
 
 .signlang__features-container__feature-title {
@@ -16,19 +28,20 @@
 
 .signlang__features-container__feature-title h1 {
     font-family: var(--font-family);
-    font-weight: 800;
-    font-size: 20px;
-    line-height: 24px;
-    word-spacing: 2px;
-    color: #fff;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.3;
+    word-spacing: 1px;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
 }
 
 .signlang__features-container__feature-title div {
-    width: 50px;
-    height: 2px;
-    background: var(--gradient-bar);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin-bottom: 0.25rem;
+    width: 60px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    margin-bottom: 0.75rem;
 }
 
 .signlang__features-container_feature-text {
@@ -39,11 +52,12 @@
 
 .signlang__features-container_feature-text p {
     font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 24px;
-    word-spacing: 5px;
-    color: var(--color-text);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+    word-spacing: 1px;
+    color: var(--color-subtext);
+    margin: 0;
 }
 
 @media screen and (max-width: 550px) {

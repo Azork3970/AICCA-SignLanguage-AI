@@ -15,11 +15,17 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255), -- NULL for OAuth users
   provider ENUM('local', 'google', 'facebook') DEFAULT 'local',
   provider_id VARCHAR(255), -- OAuth provider ID
-    photo_url VARCHAR(500),
-    reset_token VARCHAR(255),
-    reset_token_expiry DATETIME,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  photo_url VARCHAR(500),
+  reset_token VARCHAR(255),
+  reset_token_expiry DATETIME,
+  -- Security fields for account lockout
+  failed_login_attempts INT DEFAULT 0,
+  locked_until DATETIME NULL,
+  last_login TIMESTAMP NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_email (email),
+  INDEX idx_locked_until (locked_until)
 );
 
 -- SignData table for storing sign language recognition data

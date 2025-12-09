@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 let user = null;
 const userCookie = Cookies.get('sign-language-ai-user');
 
-if (userCookie) {
+if (userCookie && userCookie !== 'undefined') {
   try {
     user = JSON.parse(userCookie);
   } catch (error) {

@@ -26,13 +26,27 @@ const securityLogger = winston.createLogger({
 });
 
 const authRoutes = require('./routes/auth/auth.js');
-
 const dataRoutes = require('./routes/data');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security middleware
+/* =======================
+   🔥 CORS FIX – MUST BE FIRST
+======================= */
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Allow preflight
+app.options('*', cors());
+
+/* =======================
+   Security middleware
+======================= */
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -41,7 +55,7 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       scriptSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://accounts.google.com", "https://www.facebook.com"]
+      connectSrc: ["'self'", "https://accounts.google.com", "https://www.facebook.com", "http://localhost:3000"]
     }
   },
   hsts: {
@@ -53,8 +67,8 @@ app.use(helmet({
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: 'Quá nhiều yêu cầu từ IP này, vui lòng thử lại sau.',
   standardHeaders: true,
   legacyHeaders: false,
@@ -69,8 +83,8 @@ const limiter = rateLimit({
 });
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 auth requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 5,
   message: 'Quá nhiều lần thử đăng nhập, vui lòng thử lại sau 15 phút.',
   standardHeaders: true,
   legacyHeaders: false,
@@ -84,15 +98,12 @@ const authLimiter = rateLimit({
   }
 });
 
-// Apply rate limiting to auth routes
 app.use('/auth/login', authLimiter);
 app.use('/auth/register', authLimiter);
 app.use('/auth/forgot-password', authLimiter);
-
-// Apply general rate limiting
 app.use(limiter);
 
-// HTTPS enforcement in production
+// HTTPS redirect (production)
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
     if (req.header('x-forwarded-proto') !== 'https') {
@@ -102,12 +113,6 @@ if (process.env.NODE_ENV === 'production') {
     }
   });
 }
-
-// CORS
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
-}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -119,7 +124,7 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// Prepare db
+// Database
 let db;
 (async () => {
   try {
@@ -132,17 +137,13 @@ let db;
 
     console.log('DB connected');
 
-    // Make db globally available
     global.db = db;
 
-    // 1) LOAD PASSPORT CONFIG + PASS DB
     require('./routes/auth/auth.js')(passport, db);
 
-    // 2) Initialize Passport after strategies loaded
     app.use(passport.initialize());
     app.use(passport.session());
 
-    // 3) Setup routes after passport + db ready
     app.use('/auth', authRoutes(passport, db));
     app.use('/data', dataRoutes);
 

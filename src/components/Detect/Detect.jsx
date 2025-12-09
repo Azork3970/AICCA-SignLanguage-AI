@@ -28,6 +28,7 @@ const Detect = () => {
   const [gestureRecognizer, setGestureRecognizer] = useState(null);
   const [runningMode, setRunningMode] = useState("IMAGE");
   const [progress, setProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const requestRef = useRef();
 
@@ -154,7 +155,6 @@ const Detect = () => {
 
   const enableCam = useCallback(() => {
     if (!gestureRecognizer) {
-      alert("Please wait for gestureRecognizer to load");
       return;
     }
 
@@ -233,18 +233,25 @@ const Detect = () => {
 
   useEffect(() => {
     async function loadGestureRecognizer() {
-      const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
-      );
-      const recognizer = await GestureRecognizer.createFromOptions(vision, {
-        baseOptions: {
-          modelAssetPath: "/Trained Model/sign_language_recognizer_25-04-2023.task",
+      setIsLoading(true);
+      try {
+        const vision = await FilesetResolver.forVisionTasks(
+          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+        );
+        const recognizer = await GestureRecognizer.createFromOptions(vision, {
+          baseOptions: {
+            modelAssetPath: "/Trained Model/sign_language_recognizer_25-04-2023.task",
 
-        },
-        numHands: 2,
-        runningMode: runningMode,
-      });
-      setGestureRecognizer(recognizer);
+          },
+          numHands: 2,
+          runningMode: runningMode,
+        });
+        setGestureRecognizer(recognizer);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error loading gesture recognizer:", error);
+        setIsLoading(false);
+      }
     }
     loadGestureRecognizer();
   }, [runningMode]);
@@ -265,8 +272,8 @@ const Detect = () => {
               <canvas ref={canvasRef} className="signlang_canvas" />
 
               <div className="signlang_data-container">
-                <button onClick={enableCam}>
-                  {webcamRunning ? "Stop" : "Start"}
+                <button onClick={enableCam} disabled={isLoading}>
+                  {isLoading ? "Loading..." : webcamRunning ? "Stop" : "Start"}
                 </button>
 
                 <div className="tts-toggle">

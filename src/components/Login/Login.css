@@ -236,6 +236,24 @@
   color: #0077b6;
 }
 
+.text-link {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.text-link:hover {
+  color: #0077b6;
+}
+
 .login-footer a {
   color: var(--color-primary);
   text-decoration: none;

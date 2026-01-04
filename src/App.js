@@ -13,6 +13,8 @@ import {
 } from "./components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeProvider } from "./context/ThemeContext";
+import { ProgressProvider } from "./context/ProgressContext";
 
 const notifyMsg = (type, msg) => {
   if (type === "success") {
@@ -35,66 +37,68 @@ const Layout = ({ children }) => {
 };
 
 function App() {
-  
+
   return (
-    <div className="App">
-      <Routes>
-        <Route
-          exact
-          path="/"
-          element={
-            <Layout notifyMsg={notifyMsg}>
-              <Home />
-            </Layout>
-          }
+    <ThemeProvider>
+      <div className="App">
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <Layout notifyMsg={notifyMsg}>
+                <Home />
+              </Layout>
+            }
+          />
+
+          <Route
+            exact
+            path="/detect"
+            element={
+              <Layout>
+                <Detect />
+              </Layout>
+            }
+          />
+
+          <Route
+            exact
+            path="/convert"
+            element={
+              <Layout>
+                <Convert />
+              </Layout>
+            }
+          />
+
+          <Route
+            exact
+            path="/dashboard"
+            element={
+              <Layout>
+                <Dashboard/>
+              </Layout>
+            }
+          />
+
+          <Route exact path="/login" element={<Login notifyMsg={notifyMsg} />} />
+
+          <Route exact path="/forgot-password" element={<ForgotPassword notifyMsg={notifyMsg} />} />
+
+          <Route exact path="*" element={<NotFound />} />
+        </Routes>
+
+        <ToastContainer
+          position="top-left"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          pauseOnHover
         />
-
-        <Route
-          exact
-          path="/detect"
-          element={
-            <Layout>
-              <Detect />
-            </Layout>
-          }
-        />
-
-        <Route
-          exact
-          path="/convert"
-          element={
-            <Layout>
-              <Convert />
-            </Layout>
-          }
-        />
-
-        <Route
-          exact
-          path="/dashboard"
-          element={
-            <Layout>
-              <Dashboard/>
-            </Layout>
-          }
-        />
-
-        <Route exact path="/login" element={<Login notifyMsg={notifyMsg} />} />
-
-        <Route exact path="/forgot-password" element={<ForgotPassword notifyMsg={notifyMsg} />} />
-
-        <Route exact path="*" element={<NotFound />} />
-      </Routes>
-
-      <ToastContainer
-        position="top-left"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        pauseOnHover
-      />
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
 

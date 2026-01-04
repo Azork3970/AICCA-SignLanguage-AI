@@ -20,3 +20,19 @@
   --color-warning: #ed8936;
   --color-info: #4299e1;
 }
+
+.dark {
+  --color-bg: #1a202c;
+  --color-footer: #2d3748;
+  --color-blog: #2d3748;
+  --color-text: #f7fafc;
+  --color-subtext: #a0aec0;
+  --color-primary: #63b3ed;
+  --color-secondary: #3182ce;
+  --color-accent: #ffd700;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --color-success: #48bb78;
+  --color-error: #fc8181;
+  --color-warning: #f6ad55;
+  --color-info: #63b3ed;
+}

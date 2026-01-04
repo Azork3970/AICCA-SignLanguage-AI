@@ -91,6 +91,21 @@
     transition: background 0.3s ease;
 }
 
+.theme-toggle-btn {
+    background: transparent !important;
+    border: none !important;
+    color: var(--color-text) !important;
+    padding: 0.5rem !important;
+    margin-right: 10px !important;
+    cursor: pointer;
+    border-radius: 50% !important;
+    transition: background 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--color-shadow) !important;
+}
+
 .signlang_auth-data button:hover,
 .signlang__navbar-menu_container button:hover {
     background: var(--color-secondary);

@@ -4,19 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assests/logo2.png";
 import UserIcon from "../../assests/user-icon.png";
 import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/actions/authaction";
+import { useTheme } from "../../context/ThemeContext";
 
 const Navbar = ({ notifyMsg }) => {
   const [toggle, setToggle] = useState(false);
 
   const user = useSelector((state) => state.auth?.user);
-
   const { accessToken } = useSelector((state) => state.auth);
-
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const handleLogin = () => {
     navigate('/login');
@@ -24,7 +24,7 @@ const Navbar = ({ notifyMsg }) => {
 
   const handleLogout = () => {
     dispatch(logout());
-    notifyMsg("success", "Logged Out Successfully !");
+    notifyMsg("success", "Đã đăng xuất thành công!");
   };
 
   return (
@@ -61,6 +61,9 @@ const Navbar = ({ notifyMsg }) => {
         </div>
 
         <div className="signlang_auth-data">
+          <button type="button" onClick={toggleTheme} className="theme-toggle-btn">
+            {isDarkMode ? <MdLightMode size={24} /> : <MdDarkMode size={24} />}
+          </button>
           {accessToken ? (
             <>
               <img src={user?.photoURL || UserIcon} alt="user-icon" />
@@ -109,6 +112,9 @@ const Navbar = ({ notifyMsg }) => {
             </div>
 
             <div className="signlang__navbar-menu_container-links-authdata">
+              <button type="button" onClick={toggleTheme} className="theme-toggle-btn">
+                {isDarkMode ? <MdLightMode size={24} /> : <MdDarkMode size={24} />}
+              </button>
               {accessToken ? (
                 <>
                   <img src={user?.photoURL || UserIcon} alt="user-icon" />

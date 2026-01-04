@@ -15,6 +15,7 @@ import { SignImageData } from "../../data/SignImageData";
 import { useDispatch, useSelector } from "react-redux";
 import { addSignData } from "../../redux/actions/signdataaction";
 import ProgressBar from "./ProgressBar/ProgressBar";
+import { useProgress } from "../../context/ProgressContext";
 
 import DisplayImg from "../../assests/display.png";
 
@@ -23,6 +24,7 @@ let startTime = "";
 const Detect = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  const { updateProgress } = useProgress();
   const [webcamRunning, setWebcamRunning] = useState(false);
   const [gestureOutput, setGestureOutput] = useState("");
   const [gestureRecognizer, setGestureRecognizer] = useState(null);
@@ -215,6 +217,7 @@ const Detect = () => {
       };
 
       dispatch(addSignData(data));
+      updateProgress(data);
       setDetectedData([]);
     } else {
       setWebcamRunning(true);
@@ -229,6 +232,7 @@ const Detect = () => {
     user?.name,
     user?.userId,
     dispatch,
+    updateProgress
   ]);
 
   useEffect(() => {

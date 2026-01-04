@@ -53,7 +53,6 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-
       scriptSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https:"],
       connectSrc: ["'self'", "https://accounts.google.com", "https://www.facebook.com", "http://localhost:3000"]
@@ -130,13 +129,11 @@ let db;
 (async () => {
   try {
     db = await mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: 3306
-});
-
+      host: process.env.DB_HOST || 'localhost',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || 'khang12345',
+      database: process.env.DB_NAME || 'sign_language_db',
+    });
 
     console.log('DB connected');
 

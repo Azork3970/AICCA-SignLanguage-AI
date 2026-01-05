@@ -3,6 +3,8 @@ const { authenticateToken } = require('../middleware/auth');
 const { createTableQuery, insertSignDataQuery, getSignDataByUserQuery, getAllSignDataQuery } = require('../models/SignData');
 const { body, validationResult } = require('express-validator');
 const winston = require('winston');
+const multer = require('multer');
+const path = require('path');
 const router = express.Router();
 
 // Security logger for data operations
@@ -16,6 +18,31 @@ const dataLogger = winston.createLogger({
     new winston.transports.File({ filename: 'data-security.log' }),
     new winston.transports.Console()
   ]
+});
+
+// Multer configuration for video uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 100 * 1024 * 1024, // 100MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('video/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only video files are allowed!'), false);
+    }
+  }
 });
 
 // Middleware to attach db to req
@@ -97,6 +124,31 @@ router.get('/top-users', async (req, res) => {
     res.json(topUsers);
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch top users', error: error.message });
+  }
+});
+
+// Video upload endpoint
+router.post('/upload-video', authenticateToken, upload.single('video'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No video file provided' });
+    }
+
+    const videoPath = req.file.path;
+    const userId = req.user.userId;
+
+    // Log the upload
+    dataLogger.info(`Video uploaded by user ${userId}: ${req.file.filename}`);
+
+    res.status(200).json({
+      message: 'Video uploaded successfully',
+      filename: req.file.filename,
+      path: videoPath,
+      size: req.file.size
+    });
+  } catch (error) {
+    dataLogger.error(`Video upload error: ${error.message}`);
+    res.status(500).json({ message: 'Failed to upload video', error: error.message });
   }
 });
 

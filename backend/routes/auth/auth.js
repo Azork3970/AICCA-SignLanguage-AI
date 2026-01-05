@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const jwtSecret = process.env.JWT_SECRET || 'default_secret_key_change_in_production';
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -292,7 +293,7 @@ module.exports = (passport, db) => {
         userId: user.id,
         email: user.email,
         name: user.name
-      }, process.env.JWT_SECRET, { expiresIn: "2h" });
+      }, jwtSecret, { expiresIn: "2h" });
 
       res.json({
         accessToken: token,
@@ -321,7 +322,7 @@ module.exports = (passport, db) => {
           userId: req.user.id,
           name: req.user.name,
           email: req.user.email,
-        }, process.env.JWT_SECRET, { expiresIn: '2h' });
+        }, jwtSecret, { expiresIn: '2h' });
 
         res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);
       } catch (err) {
@@ -344,7 +345,7 @@ module.exports = (passport, db) => {
           userId: req.user.id,
           name: req.user.name,
           email: req.user.email,
-        }, process.env.JWT_SECRET, { expiresIn: '2h' });
+        }, jwtSecret, { expiresIn: '2h' });
 
         res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);
       } catch (err) {

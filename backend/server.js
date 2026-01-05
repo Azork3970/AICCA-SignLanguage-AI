@@ -65,24 +65,24 @@ app.use(helmet({
   }
 }));
 
-// Rate limiting
-const limiter = rateLimit({
+// Rate limiting - disabled in development
+const limiter = process.env.NODE_ENV === 'production' ? rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   message: 'Quá nhiều yêu cầu từ IP này, vui lòng thử lại sau.',
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
-    securityLogger.warn('Rate limit exceeded', {
+    securityLogger.warn('General rate limit exceeded', {
       ip: req.ip,
       url: req.url,
       userAgent: req.get('User-Agent')
     });
     res.status(429).json({ message: 'Quá nhiều yêu cầu, vui lòng thử lại sau.' });
   }
-});
+}) : (req, res, next) => next(); // No limit in development
 
-const authLimiter = rateLimit({
+const authLimiter = process.env.NODE_ENV === 'production' ? rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
   message: 'Quá nhiều lần thử đăng nhập, vui lòng thử lại sau 15 phút.',
@@ -96,12 +96,14 @@ const authLimiter = rateLimit({
     });
     res.status(429).json({ message: 'Quá nhiều lần thử đăng nhập, vui lòng thử lại sau.' });
   }
-});
+}) : (req, res, next) => next(); // No limit in development
 
-app.use('/auth/login', authLimiter);
-app.use('/auth/register', authLimiter);
-app.use('/auth/forgot-password', authLimiter);
-app.use(limiter);
+if (process.env.NODE_ENV === 'production') {
+  app.use('/auth/login', authLimiter);
+  app.use('/auth/register', authLimiter);
+  app.use('/auth/forgot-password', authLimiter);
+  app.use(limiter);
+}
 
 // HTTPS redirect (production)
 if (process.env.NODE_ENV === 'production') {

@@ -85,7 +85,7 @@ const ChartComp = ({ signDataList }) => {
     <div className="signlang_chart">
       {dates.length && secondsSpent.length > 0 ? (
         <>
-          <h2 className="gradient__text">Time Spent By You (in seconds)</h2>
+          <h2 className="gradient__text">Thời Gian Bạn Dành Ra (tính bằng giây)</h2>
           <Bar className="bar-chart" data={data} options={options} />
         </>
       ) : (

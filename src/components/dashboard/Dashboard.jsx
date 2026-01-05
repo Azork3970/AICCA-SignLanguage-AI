@@ -74,7 +74,7 @@ const Dashboard = () => {
                   {topUsers.map((user, index) => (
                     <div className="signlang_tank-row" key={index * 786}>
                       <h2 className="gradient__text">{user.rank}</h2>
-                      <h3>{user.username}</h3>
+                      <h3 className="gradient__text">{user.username}</h3>
                       <img
                         src={
                           user.rank === 1
@@ -98,26 +98,29 @@ const Dashboard = () => {
                 <h2 className="gradient__text">Các Ký Hiệu Bạn Luyện Tập Nhiều Nhất</h2>
 
                 <table>
-                  <tr>
-                    <th className="table-heading">Sr.No</th>
-                    <th className="table-heading">Signs</th>
-                    <th className="table-heading">Frequency</th>
-                  </tr>
-
-                  {TopFiveSignsObject.map((data, i) => (
-                    <tr key={i * 111} className="sign-row">
-                      <td>{i + 1}</td>
-                      <td>{data.SignDetected}</td>
-                      <td>{data.count} times</td>
+                  <thead>
+                    <tr>
+                      <th className="table-heading">Sr.No</th>
+                      <th className="table-heading">Signs</th>
+                      <th className="table-heading">Frequency</th>
                     </tr>
-                  ))}
+                  </thead>
+                  <tbody>
+                    {TopFiveSignsObject.map((data, i) => (
+                      <tr key={i * 111} className="sign-row">
+                        <td className="gradient__text">{i + 1}</td>
+                        <td className="gradient__text">{data.SignDetected}</td>
+                        <td className="gradient__text">{data.count} times</td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               </div>
 
               <div className="signlang_quotes-box">
                 <h2 className="gradient__text">Trích Dẫn Trong Ngày</h2>
                 <div>
-                  <blockquote>{quote.quote}</blockquote>
+                  <blockquote className="gradient__text">{quote.quote}</blockquote>
                 </div>
               </div>
             </div>

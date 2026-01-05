@@ -52,7 +52,45 @@
 
     margin: 0 1rem;
     cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+}
 
+.signlang_navlinks_container p:hover,
+.signlang__navbar-menu_container p:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    filter: brightness(1.2);
+}
+
+.signlang_navlinks_container p::after,
+.signlang__navbar-menu_container p::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.signlang_navlinks_container p:hover::after,
+.signlang__navbar-menu_container p:hover::after {
+    width: 100%;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .signlang_navlinks{

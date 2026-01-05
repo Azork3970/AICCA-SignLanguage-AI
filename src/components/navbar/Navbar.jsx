@@ -92,20 +92,20 @@ const Navbar = ({ notifyMsg }) => {
         {toggle && (
           <div className="signlang__navbar-menu_container scale-up-center">
             <div className="signlang__navbar-menu_container-links">
-              <p>
+              <p className="gradient__text">
                 <Link to="/">Trang chủ</Link>
               </p>
 
-              <p>
+              <p className="gradient__text">
                 <Link to="/detect">Nhận diện</Link>
               </p>
 
-              <p>
+              <p className="gradient__text">
                 <Link to="/convert">Chuyển đổi</Link>
               </p>
 
               {accessToken && (
-                <p>
+                <p className="gradient__text">
                   <Link to="/dashboard">Bảng điều khiển</Link>
                 </p>
               )}

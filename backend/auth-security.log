@@ -4,3 +4,7 @@
 {"email":"khangzzzz8@gmail.com","ip":"::1","level":"warn","message":"Registration attempt with existing email","timestamp":"2025-12-05T05:37:23.701Z"}
 {"email":"khangzzzz8@gmail.com","ip":"::1","level":"warn","message":"Registration attempt with existing email","timestamp":"2025-12-05T05:40:01.617Z"}
 {"email":"quynnhuciute@gmail.com","error":"Unknown column 'last_login' in 'field list'","ip":"::1","level":"error","message":"Registration error","timestamp":"2025-12-05T05:42:44.236Z"}
+{"email":"khangzzzz8@gmail.com","errors":["Mật khẩu phải chứa ít nhất 1 chữ hoa","Mật khẩu phải chứa ít nhất 1 chữ thường","Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt"],"ip":"::1","level":"warn","message":"Weak password registration attempt","timestamp":"2026-01-05T13:38:11.024Z"}
+{"email":"khangzzzz8@gmail.com","errors":["Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt"],"ip":"::1","level":"warn","message":"Weak password registration attempt","timestamp":"2026-01-05T13:38:27.316Z"}
+{"email":"khangzzzz8@gmail.com","ip":"::1","level":"warn","message":"Registration attempt with existing email","timestamp":"2026-01-05T13:38:31.034Z"}
+{"email":"hatuankhangdev@gmail.com","error":"Unknown column 'last_login' in 'field list'","ip":"::1","level":"error","message":"Registration error","timestamp":"2026-01-05T13:46:02.392Z"}
